@@ -1,34 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>गगनBoard</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- SortableJS -->
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
-
     *{
       font-family:'Poppins',sans-serif;
     }
 
     body{
-      background:
-      linear-gradient(
-        135deg,
-        #fef9c3,
-        #dbeafe,
-        #fce7f3
-      );
-
+      background:linear-gradient(135deg,#fef3c7,#dbeafe,#fce7f3);
       min-height:100vh;
       overflow-x:hidden;
     }
@@ -39,7 +26,7 @@
 
     .glass{
       background:rgba(255,255,255,0.7);
-      backdrop-filter:blur(14px);
+      backdrop-filter:blur(12px);
       border:1px solid rgba(255,255,255,0.5);
       box-shadow:0 10px 30px rgba(0,0,0,0.08);
     }
@@ -57,25 +44,6 @@
     textarea{
       resize:none;
     }
-
-    .fade{
-      animation:fade 0.35s ease;
-    }
-
-    @keyframes fade{
-
-      from{
-        opacity:0;
-        transform:translateY(10px);
-      }
-
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-
-    }
-
   </style>
 </head>
 
@@ -84,12 +52,9 @@
 <div class="min-h-screen p-5 lg:p-8">
 
   <!-- HEADER -->
-  <div
-    id="topBar"
-    class="flex flex-col lg:flex-row justify-between gap-5 mb-6">
+  <div id="topBar" class="flex flex-col lg:flex-row justify-between gap-5 mb-6">
 
     <div>
-
       <h1 class="text-5xl font-bold text-slate-800 logo">
         गगन<span class="text-blue-600">Board</span>
       </h1>
@@ -97,599 +62,278 @@
       <p class="text-slate-600 mt-3 text-lg">
         Visual teaching platform for classrooms.
       </p>
-
     </div>
 
-    <div class="flex gap-3 flex-wrap items-start">
+    <div class="flex gap-3 flex-wrap">
 
-      <!-- Upload -->
-      <label
-        class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-3 rounded-2xl cursor-pointer hover:scale-105 transition shadow-lg font-medium">
-
-        📤 Upload Images
-
-        <input
-          id="imageInput"
-          type="file"
-          accept="image/*"
-          multiple
-          hidden>
-
-      </label>
-
-      <!-- Fullscreen -->
-      <button
-        id="fullscreenBtn"
+      <button id="fullscreenBtn"
         class="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-5 py-3 rounded-2xl hover:scale-105 transition shadow-lg font-medium">
-
         🎥 Presentation Mode
-
       </button>
 
     </div>
-
   </div>
 
   <!-- MAIN -->
-  <div
-    id="mainLayout"
-    class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
     <!-- SIDEBAR -->
-    <div
-      id="sidebar"
-      class="glass rounded-3xl p-5 lg:col-span-1 h-fit">
+    <div id="sidebar" class="glass rounded-3xl p-5 lg:col-span-1">
 
       <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-slate-800">Slides</h2>
 
-        <h2 class="text-2xl font-bold text-slate-800">
-          Slides
-        </h2>
-
-        <span
-          id="slideNumberBadge"
+        <span id="slideNumberBadge"
           class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
-          0
+          10
         </span>
-
       </div>
 
-      <!-- Slides List -->
-      <div id="slidesList" class="space-y-3">
-
-        <div class="text-slate-500 text-center py-10">
-          Upload images to start your class.
-        </div>
-
-      </div>
+      <div id="slidesList" class="space-y-3"></div>
 
     </div>
 
     <!-- CONTENT -->
-    <div
-      id="contentArea"
-      class="glass rounded-3xl p-6 lg:col-span-3 fade">
+    <div class="glass rounded-3xl p-6 lg:col-span-3">
 
-      <!-- EMPTY STATE -->
-      <div
-        id="emptyState"
-        class="text-center py-24">
+      <div id="presentationArea">
 
-        <div class="text-8xl mb-6">
-          📚
-        </div>
-
-        <h2 class="text-4xl font-bold text-slate-800 mb-4">
-          Welcome to गगनBoard
-        </h2>
-
-        <p class="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
-
-          Upload educational images,
-          add explanations,
-          reorder slides,
-          and present beautifully in class.
-
-        </p>
-
-      </div>
-
-      <!-- PRESENTATION AREA -->
-      <div id="presentationArea" class="hidden">
-
-        <!-- TOP CONTROLS -->
-        <div
-          id="normalControls"
+        <div id="normalControls"
           class="flex flex-wrap justify-between gap-4 mb-5 items-start">
 
           <div>
+            <h2 id="slideTitle"
+              class="text-3xl font-bold text-slate-800"></h2>
 
-            <h2
-              id="slideTitle"
-              class="text-3xl font-bold text-slate-800">
-            </h2>
-
-            <p
-              id="slideCount"
-              class="text-slate-500 mt-1">
-            </p>
-
+            <p id="slideCount"
+              class="text-slate-500 mt-1"></p>
           </div>
 
-          <!-- BUTTONS -->
-          <div class="flex gap-2 flex-wrap">
+          <div class="flex gap-2">
 
-            <button
-              id="prevBtn"
+            <button id="prevBtn"
               class="bg-slate-200 hover:bg-slate-300 px-5 py-2 rounded-xl font-semibold transition">
               ◀ Prev
             </button>
 
-            <button
-              id="nextBtn"
+            <button id="nextBtn"
               class="bg-slate-200 hover:bg-slate-300 px-5 py-2 rounded-xl font-semibold transition">
               Next ▶
             </button>
 
-            <button
-              id="editPhotoBtn"
-              class="bg-yellow-400 hover:bg-yellow-500 px-5 py-2 rounded-xl font-semibold transition">
-              ✏️ Adjust Photo
-            </button>
-
-            <button
-              id="resetPhotoBtn"
-              class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-xl font-semibold transition">
-              🔄 Reset
-            </button>
-
-            <button
-              id="deletePhotoBtn"
-              class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-semibold transition">
-              🗑 Delete
-            </button>
-
           </div>
-
         </div>
 
-        <!-- IMAGE -->
         <div class="flex justify-center mb-6">
-
-          <img
-            id="slideImage"
+          <img id="slideImage"
             class="slide-image rounded-3xl shadow-2xl"
-            src=""
-          />
-
+            src="">
         </div>
 
-        <!-- NOTES -->
         <div id="notesSection">
 
-          <label
-            class="text-xl font-bold text-slate-800 block mb-3">
-
+          <label class="text-xl font-bold text-slate-800 block mb-3">
             Explanation Notes
-
           </label>
 
           <textarea
             id="slideNotes"
             class="w-full min-h-[160px] bg-white/80 border border-slate-200 rounded-3xl p-5 text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-            placeholder="Write explanation for this image..."
           ></textarea>
 
         </div>
 
       </div>
-
     </div>
-
   </div>
-
 </div>
 
 <script>
 
-  // ELEMENTS
-  const imageInput =
-    document.getElementById('imageInput');
+let slides = [
 
-  const slidesList =
-    document.getElementById('slidesList');
+  {
+    title: "Step 1",
+    image: "images/1.png",
+    notes: "Visit the Krita website."
+  },
 
-  const slideImage =
-    document.getElementById('slideImage');
+  {
+    title: "Step 2",
+    image: "images/2.png",
+    notes: "Click the download button."
+  },
 
-  const slideTitle =
-    document.getElementById('slideTitle');
+  {
+    title: "Step 3",
+    image: "images/3.png",
+    notes: "Download installer."
+  },
 
-  const slideCount =
-    document.getElementById('slideCount');
+  {
+    title: "YouTube Channel",
+    image: "images/4.png",
+    notes: "My YouTube channel."
+  },
 
-  const slideNotes =
-    document.getElementById('slideNotes');
+  {
+    title: "Books",
+    image: "images/5.jpg",
+    notes: "Books and study material."
+  },
 
-  const prevBtn =
-    document.getElementById('prevBtn');
+  {
+    title: "Cricket Bat",
+    image: "images/6.jpg",
+    notes: "DSC cricket bat."
+  },
 
-  const nextBtn =
-    document.getElementById('nextBtn');
+  {
+    title: "Cricket Kit",
+    image: "images/7.jpg",
+    notes: "Cricket setup."
+  },
 
-  const editPhotoBtn =
-    document.getElementById('editPhotoBtn');
+  {
+    title: "Portrait",
+    image: "images/8.png",
+    notes: "Portrait image."
+  },
 
-  const resetPhotoBtn =
-    document.getElementById('resetPhotoBtn');
+  {
+    title: "Car Thumbnail",
+    image: "images/9.jpeg",
+    notes: "Drag race thumbnail."
+  },
 
-  const deletePhotoBtn =
-    document.getElementById('deletePhotoBtn');
-
-  const emptyState =
-    document.getElementById('emptyState');
-
-  const presentationArea =
-    document.getElementById('presentationArea');
-
-  const slideNumberBadge =
-    document.getElementById('slideNumberBadge');
-
-  const fullscreenBtn =
-    document.getElementById('fullscreenBtn');
-
-  const sidebar =
-    document.getElementById('sidebar');
-
-  const topBar =
-    document.getElementById('topBar');
-
-  const normalControls =
-    document.getElementById('normalControls');
-
-  // STORAGE
-  let slides =
-    JSON.parse(
-      localStorage.getItem('gaganboardSlides')
-    ) || [];
-
-  let currentSlide = 0;
-
-  // SAVE
-  function saveSlides(){
-
-    localStorage.setItem(
-      'gaganboardSlides',
-      JSON.stringify(slides)
-    );
-
+  {
+    title: "Expression Photo",
+    image: "images/10.jpeg",
+    notes: "Portrait image."
   }
 
-  // UPLOAD IMAGES
-  imageInput.addEventListener('change',(e)=>{
+];
 
-    const files =
-      Array.from(e.target.files);
+const slidesList = document.getElementById('slidesList');
+const slideImage = document.getElementById('slideImage');
+const slideTitle = document.getElementById('slideTitle');
+const slideCount = document.getElementById('slideCount');
+const slideNotes = document.getElementById('slideNotes');
 
-    files.forEach(file=>{
+let currentSlide = 0;
 
-      const reader =
-        new FileReader();
+function renderSlides(){
 
-      reader.onload = function(event){
+  slidesList.innerHTML='';
 
-        slides.push({
+  slides.forEach((slide,index)=>{
 
-          title:file.name,
-          image:event.target.result,
-          notes:''
+    const button=document.createElement('button');
 
-        });
-
-        saveSlides();
-        renderSlides();
-
-        if(slides.length===1){
-
-          showSlide(0);
-
-        }
-
-      }
-
-      reader.readAsDataURL(file);
-
-    });
-
-  });
-
-  // RENDER SLIDES
-  function renderSlides(){
-
-    slidesList.innerHTML='';
-
-    slideNumberBadge.textContent =
-      slides.length;
-
-    if(slides.length===0){
-
-      slidesList.innerHTML=`
-        <div class="text-slate-500 text-center py-10">
-          Upload images to start your class.
-        </div>
-      `;
-
-      return;
-    }
-
-    slides.forEach((slide,index)=>{
-
-      const button =
-        document.createElement('button');
-
-      button.className = `
-        w-full
-        p-3
-        rounded-2xl
-        text-left
-        transition-all
-        duration-200
-        cursor-move
-        ${
-          index===currentSlide
-          ?
-          'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg scale-[1.02]'
-          :
-          'bg-white hover:bg-slate-100 text-slate-700'
-        }
-      `;
-
-      button.innerHTML = `
-        <div class="font-semibold truncate">
-          ${slide.title}
-        </div>
-
-        <div class="text-sm opacity-80 mt-1">
-          Slide ${index+1}
-        </div>
-      `;
-
-      button.onclick = ()=>showSlide(index);
-
-      slidesList.appendChild(button);
-
-    });
-
-    // DRAG & DROP
-    Sortable.create(slidesList,{
-
-      animation:200,
-
-      onEnd:function(evt){
-
-        const movedItem =
-          slides.splice(evt.oldIndex,1)[0];
-
-        slides.splice(
-          evt.newIndex,
-          0,
-          movedItem
-        );
-
-        currentSlide = evt.newIndex;
-
-        saveSlides();
-
-        renderSlides();
-
-        showSlide(currentSlide);
-
-      }
-
-    });
-
-  }
-
-  // SHOW SLIDE
-  function showSlide(index){
-
-    currentSlide=index;
-
-    emptyState.classList.add('hidden');
-
-    presentationArea.classList.remove('hidden');
-
-    const slide = slides[index];
-
-    slideImage.src = slide.image;
-
-    slideTitle.textContent =
-      slide.title;
-
-    slideCount.textContent =
-      `Slide ${index+1} of ${slides.length}`;
-
-    slideNotes.value =
-      slide.notes || '';
-
-    renderSlides();
-
-  }
-
-  // SAVE NOTES
-  slideNotes.addEventListener('input',()=>{
-
-    if(slides[currentSlide]){
-
-      slides[currentSlide].notes =
-        slideNotes.value;
-
-      saveSlides();
-
-    }
-
-  });
-
-  // NEXT
-  nextBtn.addEventListener('click',()=>{
-
-    if(currentSlide < slides.length-1){
-
-      showSlide(currentSlide+1);
-
-    }
-
-  });
-
-  // PREV
-  prevBtn.addEventListener('click',()=>{
-
-    if(currentSlide > 0){
-
-      showSlide(currentSlide-1);
-
-    }
-
-  });
-
-  // KEYBOARD NAVIGATION
-  document.addEventListener('keydown',(e)=>{
-
-    if(
-      e.key==='ArrowRight' &&
-      currentSlide < slides.length-1
-    ){
-
-      showSlide(currentSlide+1);
-
-    }
-
-    if(
-      e.key==='ArrowLeft' &&
-      currentSlide > 0
-    ){
-
-      showSlide(currentSlide-1);
-
-    }
-
-  });
-
-  // ADJUST PHOTO
-  editPhotoBtn.addEventListener('click',()=>{
-
-    const brightness =
-      prompt('Brightness %','100');
-
-    const contrast =
-      prompt('Contrast %','100');
-
-    const saturate =
-      prompt('Saturation %','100');
-
-    slideImage.style.filter = `
-      brightness(${brightness}%)
-      contrast(${contrast}%)
-      saturate(${saturate}%)
+    button.className=`
+      w-full p-3 rounded-2xl text-left transition-all duration-200
+      ${index===currentSlide
+      ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg scale-[1.02]'
+      : 'bg-white hover:bg-slate-100 text-slate-700'}
     `;
 
-  });
+    button.innerHTML=`
+      <div class="font-semibold truncate">${slide.title}</div>
+      <div class="text-sm opacity-80 mt-1">
+        Slide ${index+1}
+      </div>
+    `;
 
-  // RESET PHOTO
-  resetPhotoBtn.addEventListener('click',()=>{
+    button.onclick=()=>showSlide(index);
 
-    slideImage.style.filter='none';
-
-  });
-
-  // DELETE PHOTO
-  deletePhotoBtn.addEventListener('click',()=>{
-
-    if(!confirm('Delete this slide?')){
-      return;
-    }
-
-    slides.splice(currentSlide,1);
-
-    saveSlides();
-
-    renderSlides();
-
-    if(slides.length===0){
-
-      presentationArea.classList.add('hidden');
-
-      emptyState.classList.remove('hidden');
-
-      return;
-
-    }
-
-    if(currentSlide >= slides.length){
-
-      currentSlide =
-        slides.length-1;
-
-    }
-
-    showSlide(currentSlide);
+    slidesList.appendChild(button);
 
   });
 
-  // FULLSCREEN
-  fullscreenBtn.addEventListener('click', async()=>{
+}
 
-    if(!document.fullscreenElement){
+function showSlide(index){
 
-      await document.documentElement.requestFullscreen();
+  currentSlide=index;
 
-      sidebar.style.display='none';
+  const slide=slides[index];
 
-      topBar.style.display='none';
+  slideImage.src=slide.image;
+  slideTitle.textContent=slide.title;
+  slideCount.textContent=`Slide ${index+1} of ${slides.length}`;
+  slideNotes.value=slide.notes;
 
-      normalControls.classList.add('hidden');
-
-      document.body.style.background='#ffffff';
-
-      slideImage.style.maxHeight='75vh';
-
-      slideNotes.classList.add('text-xl');
-
-    }else{
-
-      document.exitFullscreen();
-
-    }
-
-  });
-
-  // EXIT FULLSCREEN
-  document.addEventListener('fullscreenchange',()=>{
-
-    if(!document.fullscreenElement){
-
-      sidebar.style.display='block';
-
-      topBar.style.display='flex';
-
-      normalControls.classList.remove('hidden');
-
-      slideImage.style.maxHeight='70vh';
-
-      slideNotes.classList.remove('text-xl');
-
-    }
-
-  });
-
-  // INITIAL LOAD
   renderSlides();
 
-  if(slides.length>0){
+}
 
-    showSlide(0);
+document.getElementById('nextBtn').onclick=()=>{
+
+  if(currentSlide<slides.length-1){
+    showSlide(currentSlide+1);
+  }
+
+};
+
+document.getElementById('prevBtn').onclick=()=>{
+
+  if(currentSlide>0){
+    showSlide(currentSlide-1);
+  }
+
+};
+
+document.addEventListener('keydown',(e)=>{
+
+  if(e.key==='ArrowRight' && currentSlide<slides.length-1){
+    showSlide(currentSlide+1);
+  }
+
+  if(e.key==='ArrowLeft' && currentSlide>0){
+    showSlide(currentSlide-1);
+  }
+
+});
+
+document.getElementById('fullscreenBtn').onclick=async()=>{
+
+  if(!document.fullscreenElement){
+
+    await document.documentElement.requestFullscreen();
+
+    document.getElementById('sidebar').style.display='none';
+    document.getElementById('topBar').style.display='none';
+    document.getElementById('normalControls').style.display='none';
+
+    slideImage.style.maxHeight='80vh';
+
+    slideNotes.style.fontSize='24px';
+
+  }else{
+
+    document.exitFullscreen();
 
   }
+
+};
+
+document.addEventListener('fullscreenchange',()=>{
+
+  if(!document.fullscreenElement){
+
+    document.getElementById('sidebar').style.display='block';
+    document.getElementById('topBar').style.display='flex';
+    document.getElementById('normalControls').style.display='flex';
+
+    slideImage.style.maxHeight='70vh';
+
+    slideNotes.style.fontSize='16px';
+
+  }
+
+});
+
+showSlide(0);
 
 </script>
 
